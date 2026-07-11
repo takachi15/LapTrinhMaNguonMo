@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="vi">
+  <body>
+    <h1 id="time"></h1>
+
+    <script>
+
+      function getTime() {
+        // Gửi request đến server 
+        fetch("time.php")
+          // Chuyển đổi phản hồi từ server sang dạng văn bản (text)
+          .then((res) => res.text())
+          .then((data) => (document.getElementById("time").innerText = data));
+      }
+
+      setInterval(getTime, 5000);
+
+      getTime();
+    </script>
+  </body>
+</html>

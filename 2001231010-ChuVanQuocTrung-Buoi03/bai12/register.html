@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Đăng ký tài khoản</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 400px;
+        margin: 30px auto;
+      }
+      h2 {
+        text-align: center;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      input {
+        margin: 8px 0;
+        padding: 8px;
+      }
+      button {
+        padding: 10px;
+        background: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #218838;
+      }
+      #msg {
+        margin-top: 15px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>📝 Đăng ký tài khoản</h2>
+    <form id="regForm">
+      <input type="text" id="username" placeholder="Tên đăng nhập" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Mật khẩu" required />
+      <input
+        type="password"
+        id="confirm"
+        placeholder="Nhập lại mật khẩu"
+        required
+      />
+      <button type="submit">Đăng ký</button>
+    </form>
+    <p id="msg"></p>
+
+    <script>
+      document.getElementById("regForm").onsubmit = function (e) {
+        e.preventDefault();
+        let user = document.getElementById("username").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let pass = document.getElementById("password").value;
+        let confirm = document.getElementById("confirm").value;
+
+        // Kiểm tra
+        if (pass.length < 6) {
+          document.getElementById("msg").innerText = "Mật khẩu phải >= 6 ký tự";
+          return;
+        }
+        if (pass !== confirm) {
+          document.getElementById("msg").innerText =
+            "Mật khẩu nhập lại không khớp";
+          return;
+        }
+
+        // Gửi AJAX sang PHP
+        let formData = new FormData();
+        formData.append("username", user);
+        formData.append("email", email);
+        formData.append("password", pass);
+
+        fetch("register.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("msg").innerText = data;
+          })
+          .catch((err) => {
+            document.getElementById("msg").innerText = "Lỗi kết nối server";
+          });
+      };
+    </script>
+  </body>
+</html>

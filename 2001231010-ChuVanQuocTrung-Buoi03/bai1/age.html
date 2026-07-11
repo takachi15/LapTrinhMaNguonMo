@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kiểm tra độ tuổi</title>
+  </head>
+  <body>
+    <input type="number" id="age" placeholder="Nhập tuổi" />
+
+    <button onclick="checkAge()">Kiểm tra</button>
+
+    <p id="result"></p>
+
+    <script>
+      /**
+       * Hàm: checkAge
+       * Mục đích: Lấy giá trị tuổi từ ô input và so sánh với 18
+       * để hiển thị thông báo tương ứng.
+       */
+      function checkAge() {
+        // Lấy giá trị từ phần tử có id là 'age'
+        let age = document.getElementById("age").value;
+
+        // Kiểm tra điều kiện: Nếu tuổi từ 18 trở lên
+        if (age >= 18) {
+          // Hiển thị thông báo đủ tuổi vào thẻ p có id là 'result'
+          document.getElementById("result").innerText = "Bạn đã đủ tuổi";
+        } else {
+          // Ngược lại, thông báo chưa đủ tuổi
+          document.getElementById("result").innerText = "Bạn chưa đủ tuổi";
+        }
+      }
+    </script>
+  </body>
+</html>

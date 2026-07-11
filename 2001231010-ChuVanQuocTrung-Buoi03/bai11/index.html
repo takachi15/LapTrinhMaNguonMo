@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tỷ giá ngoại tệ</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bảng tỷ giá ngoại tệ (so với 1 USD)</h1>
+    <p>Cập nhật lần cuối: <span id="lastUpdated">Đang tải...</span></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Mã tiền tệ</th>
+          <th>Tỷ giá</th>
+        </tr>
+      </thead>
+      <tbody id="rateBody"></tbody>
+    </table>
+
+    <script>
+      function updateRates() {
+        fetch("rate.php")
+          .then((res) => res.json())
+          .then((data) => {
+            const tbody = document.getElementById("rateBody");
+            tbody.innerHTML = ""; // Xóa dữ liệu cũ
+
+            // Duyệt qua danh sách rates
+            for (const [currency, value] of Object.entries(data.rates)) {
+              tbody.innerHTML += `<tr><td>${currency}</td><td>${value}</td></tr>`;
+            }
+
+            document.getElementById("lastUpdated").innerText =
+              new Date().toLocaleTimeString();
+          })
+          .catch((err) => console.error("Lỗi khi lấy dữ liệu:", err));
+      }
+
+      // Gọi hàm ngay khi load trang
+      updateRates();
+
+      setInterval(updateRates, 10000);
+    </script>
+  </body>
+</html>

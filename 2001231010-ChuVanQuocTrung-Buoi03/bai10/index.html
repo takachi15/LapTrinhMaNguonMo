@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <body>
+    <h2>To-do List</h2>
+    <input type="text" id="taskInput" placeholder="Thêm việc mới..." />
+    <button onclick="sendAction('add')">Thêm</button>
+    <ul id="todoList"></ul>
+
+    <script>
+      // Hàm gửi hành động tới server
+      function sendAction(action, index = null, task = null) {
+        let formData = new FormData();
+        formData.append("action", action);
+        if (index !== null) formData.append("index", index);
+        if (task) formData.append("task", task);
+        if (action === "add")
+          formData.append("task", document.getElementById("taskInput").value);
+
+        fetch("todo.php", { method: "POST", body: formData })
+          .then((res) => res.json())
+          .then((data) => render(data));
+      }
+
+      // Vẽ danh sách ra màn hình
+      function render(data) {
+        let list = document.getElementById("todoList");
+        list.innerHTML = "";
+        data.forEach((item, index) => {
+          list.innerHTML += `
+                    <li>
+                        <span style="${item.done ? "text-decoration:line-through" : ""}" 
+                              onclick="sendAction('toggle', ${index})">${item.task}</span>
+                        <button onclick="sendAction('delete', ${index})">Xóa</button>
+                    </li>`;
+        });
+      }
+
+      // Tải dữ liệu ban đầu
+      sendAction("load");
+    </script>
+  </body>
+</html>
